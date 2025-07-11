@@ -16,7 +16,6 @@ export default function Home() {
   const info = useSelector((state: RootState) => state.characters.info);
   const [status, setStatus] = useState('');
 
-  // Debounce the search input
   useEffect(() => {
     const handler = setTimeout(() => setDebouncedSearch(search), 500);
     return () => clearTimeout(handler);
@@ -30,9 +29,6 @@ export default function Home() {
     dispatch(fetchCharacters({ name: debouncedSearch, status, page }) as any);
   }, [dispatch, debouncedSearch, status, page]);
 
-  const uniqueStatuses = Array.from(
-    new Set(characters.map((char) => char.status))
-  ).filter(Boolean);
 
   return (
     <main className="p-6">
@@ -51,11 +47,9 @@ export default function Home() {
           className="p-2 border rounded w-full max-w-xs bg-background"
         >
           <option value="">All Statuses</option>
-          {uniqueStatuses.map((s) => (
-            <option key={s} value={s}>
-              {s}
-            </option>
-          ))}
+          <option value="Alive">Alive</option>
+          <option value="Dead">Dead</option>
+          <option value="unknown">unknown</option>
         </select>
       </div>
       {loading && (
