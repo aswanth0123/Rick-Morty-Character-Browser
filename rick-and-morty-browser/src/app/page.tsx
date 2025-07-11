@@ -15,6 +15,7 @@ export default function Home() {
   const [page, setPage] = useState(1);
   const info = useSelector((state: RootState) => state.characters.info);
   const [status, setStatus] = useState('');
+  const [species, setSpecies] = useState('');
 
   useEffect(() => {
     const handler = setTimeout(() => setDebouncedSearch(search), 500);
@@ -23,11 +24,11 @@ export default function Home() {
 
   useEffect(() => {
     setPage(1);
-  }, [debouncedSearch, status]);
+  }, [debouncedSearch, status, species]);
 
   useEffect(() => {
-    dispatch(fetchCharacters({ name: debouncedSearch, status, page }) as any);
-  }, [dispatch, debouncedSearch, status, page]);
+    dispatch(fetchCharacters({ name: debouncedSearch, status, species, page }) as any);
+  }, [dispatch, debouncedSearch, status, species, page]);
 
 
   return (
@@ -49,6 +50,23 @@ export default function Home() {
           <option value="">All Statuses</option>
           <option value="Alive">Alive</option>
           <option value="Dead">Dead</option>
+          <option value="unknown">unknown</option>
+        </select>
+        <select
+          value={species}
+          onChange={e => setSpecies(e.target.value)}
+          className="p-2 border rounded w-full max-w-xs bg-background"
+        >
+          <option value="">All Species</option>
+          <option value="Human">Human</option>
+          <option value="Alien">Alien</option>
+          <option value="Humanoid">Humanoid</option>
+          <option value="Poopybutthole">Poopybutthole</option>
+          <option value="Mythological Creature">Mythological Creature</option>
+          <option value="Animal">Animal</option>
+          <option value="Robot">Robot</option>
+          <option value="Cronenberg">Cronenberg</option>
+          <option value="Disease">Disease</option>
           <option value="unknown">unknown</option>
         </select>
       </div>
@@ -96,7 +114,7 @@ export default function Home() {
         ))}
       </div>
 
-{/* pageination */}
+{/* Pagination */}
 
       <div className="flex justify-center items-center mt-8 space-x-4">
         <button

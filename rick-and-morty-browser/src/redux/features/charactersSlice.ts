@@ -30,7 +30,7 @@ const initialState: CharactersState = {
 export const fetchCharacters = createAsyncThunk(
   'characters/fetchCharacters',
   async (
-    { name = '', status = '', page = 1 }: { name?: string; status?: string; page?: number } = {},
+    { name = '', status = '', species = '', page = 1 }: { name?: string; status?: string; species?: string; page?: number } = {},
     thunkAPI
   ) => {
     try {
@@ -41,10 +41,15 @@ export const fetchCharacters = createAsyncThunk(
       if (status) {
         url += `&status=${encodeURIComponent(status)}`;
       }
+      if (species) {
+        url += `&species=${encodeURIComponent(species)}`;
+      }
       const response = await axios.get(url);
       const data = response.data;
+      // Only return the first 12 results for display
       return { results: (data.results as Character[]).slice(0, 12), info: data.info };
     } catch (error: any) {
+      // If the error is a 404 (no characters found), return empty results and info
       if (error.response && error.response.status === 404) {
         return { results: [], info: { count: 0, pages: 1, next: null, prev: null } };
       }
